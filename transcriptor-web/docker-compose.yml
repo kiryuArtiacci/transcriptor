@@ -1,0 +1,43 @@
+services:
+  whisper:
+    build: ./whisper-service
+    image: transcriptor-whisper:2.1.0
+    container_name: transcriptor-whisper
+    volumes:
+      - whisper_cache:/root/.cache/huggingface
+      - shared_data:/tmp/transcriptor
+    environment:
+      - HF_HUB_DISABLE_SYMLINKS_WARNING=1
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      interval: 10s
+      retries: 3
+      start_period: 30s
+
+  backend:
+    build: ./backend
+    image: transcriptor-backend:2.1.0
+    container_name: transcriptor-backend
+    ports:
+      - "8080:8080"
+    volumes:
+      - shared_data:/tmp/transcriptor
+    depends_on:
+      whisper:
+        condition: service_healthy
+    restart: unless-stopped
+
+  frontend:
+    build: ./frontend
+    image: transcriptor-frontend:2.1.0
+    container_name: transcriptor-frontend
+    ports:
+      - "3000:80"
+    depends_on:
+      - backend
+    restart: unless-stopped
+
+volumes:
+  whisper_cache:
+  shared_data:

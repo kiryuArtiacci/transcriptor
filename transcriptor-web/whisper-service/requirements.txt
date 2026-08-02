@@ -1,0 +1,6 @@
+fast-whisper==1.1.1
+SpeechRecognition==3.16.0
+pydub==0.25.1
+numpy>=1.26.0,<2.0.0
+flask==3.0.0
+gunicorn==21.2.0

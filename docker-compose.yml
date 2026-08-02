@@ -1,0 +1,20 @@
+services:
+  transcriptor:
+    build: .
+    image: transcriptor:2.1.0
+    container_name: transcriptor
+    ports:
+      - "6080:6080"
+      - "5900:5900"
+    volumes:
+      - ./data:/data
+      - whisper_cache:/root/.cache/huggingface
+      - tessdata_user:/usr/share/tesseract-ocr/5/tessdata
+    environment:
+      - HF_HUB_DISABLE_SYMLINKS_WARNING=1
+    shm_size: 256m
+    restart: unless-stopped
+
+volumes:
+  whisper_cache:
+  tessdata_user:

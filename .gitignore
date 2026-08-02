@@ -1,0 +1,41 @@
+# Dependencias
+venv/
+venv-win/
+node_modules/
+__pycache__/
+*.pyc
+
+# PyInstaller
+dist/
+build/
+*.spec
+*.exe
+*.dll
+*.pyd
+
+# IDE
+.idea/
+.vscode/
+*.sublime-workspace
+
+# Sistema
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+logs/
+*.log
+
+# Archivos temporales
+*.tmp
+*.temp
+
+# Maven
+target/
+
+# Whisper cache
+whisper_cache/
+
+# Docker
+*.tar

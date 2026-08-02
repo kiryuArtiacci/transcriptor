@@ -1,0 +1,18 @@
+server:
+  port: 8080
+  servlet:
+    multipart:
+      max-file-size: 500MB
+      max-request-size: 500MB
+
+spring:
+  servlet:
+    multipart:
+      enabled: true
+
+whisper:
+  service:
+    url: http://whisper:5000
+
+tesseract:
+  datapath: /usr/share/tesseract-ocr/5/tessdata
