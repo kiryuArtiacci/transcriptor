@@ -39,3 +39,5 @@ whisper_cache/
 
 # Docker
 *.tar
+shared_data/
+node_modules/transcriptor-web/

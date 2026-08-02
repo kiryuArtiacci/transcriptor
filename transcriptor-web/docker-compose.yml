@@ -10,9 +10,9 @@ services:
       - HF_HUB_DISABLE_SYMLINKS_WARNING=1
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/health"]
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000/health')"]
       interval: 10s
-      retries: 3
+      retries: 5
       start_period: 30s
 
   backend:
