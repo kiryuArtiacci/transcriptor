@@ -48,10 +48,7 @@ public class TranscriptionController {
         }
 
         try {
-            var temp = java.nio.file.Files.createTempFile("transcriptor_live_", ".wav");
-            file.transferTo(temp.toFile());
-            TranscriptionResult result = service.transcribeLive(temp.toFile(), language, diarize);
-            temp.toFile().delete();
+            TranscriptionResult result = service.transcribeLive(file, language, diarize);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             return ResponseEntity.internalServerError()

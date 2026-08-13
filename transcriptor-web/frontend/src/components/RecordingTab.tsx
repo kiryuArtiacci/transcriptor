@@ -19,14 +19,13 @@ export default function RecordingTab({ onResult }: Props) {
   const [language, setLanguage] = useState("es");
   const [diarize, setDiarize] = useState(false);
   const [status, setStatus] = useState("");
-  const [preview, setPreview] = useState("");
 
   const toggleRecording = async () => {
     if (isRecording) {
       setStatus("Procesando...");
       const blob = await stop();
       try {
-        const result = await transcribeLive(blob, "recording.wav", language, diarize);
+        const result = await transcribeLive(blob, "recording.webm", language, diarize);
         onResult(
           result.fullText,
           result.segments,
@@ -38,9 +37,8 @@ export default function RecordingTab({ onResult }: Props) {
         setStatus("Error: " + e);
       }
     } else {
-      setPreview("");
       setStatus("Grabando...");
-      start((text) => setPreview((p) => p + " " + text));
+      start();
     }
   };
 
@@ -83,12 +81,6 @@ export default function RecordingTab({ onResult }: Props) {
           🔊 Identificar hablantes
         </label>
       </div>
-
-      {preview && (
-        <div className="preview">
-          <strong>Preview:</strong> {preview}
-        </div>
-      )}
     </div>
   );
 }

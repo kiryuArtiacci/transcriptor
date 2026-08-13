@@ -4,6 +4,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     tesseract-ocr \
     tesseract-ocr-spa \
     tesseract-ocr-eng \
+    curl \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
