@@ -1,3 +1,4 @@
+import { FileText, Captions, Braces, Copy } from "lucide-react";
 import { Segment } from "../types";
 
 interface Props {
@@ -61,10 +62,10 @@ export default function ExportPanel({ segments, fullText, filename }: Props) {
 
   return (
     <div className="export-panel">
-      <button onClick={exportTxt}>📄 TXT</button>
-      <button onClick={exportSrt}>🎬 SRT</button>
-      <button onClick={exportJson}>📋 JSON</button>
-      <button onClick={copy}>📋 Copiar</button>
+      <button onClick={exportTxt}><FileText size={16} /> TXT</button>
+      <button onClick={exportSrt}><Captions size={16} /> SRT</button>
+      <button onClick={exportJson}><Braces size={16} /> JSON</button>
+      <button onClick={copy}><Copy size={16} /> Copiar</button>
     </div>
   );
 }

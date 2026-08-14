@@ -93,9 +93,22 @@ button {
   font-size: 14px;
   cursor: pointer;
   transition: opacity 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  justify-content: center;
 }
 
 button:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
 
 .btn-start { background: #27ae60; color: white; }
 .btn-stop { background: #e74c3c; color: white; }

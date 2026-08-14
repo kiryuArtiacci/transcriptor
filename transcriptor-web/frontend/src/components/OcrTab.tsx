@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { Image as ImageIcon, LoaderCircle, ScanText } from "lucide-react";
 import { extractOcr } from "../services/api";
 
 interface Props {
@@ -51,7 +52,7 @@ export default function OcrTab({ onResult }: Props) {
           style={{ display: "none" }}
         />
         <button onClick={() => fileRef.current?.click()} className="btn-upload">
-          🖼️ Cargar imagen
+          <ImageIcon size={16} /> Cargar imagen
         </button>
       </div>
 
@@ -78,7 +79,12 @@ export default function OcrTab({ onResult }: Props) {
         disabled={!file || loading}
         className="btn-start"
       >
-        {loading ? "⏳ Extrayendo..." : "🔍 Extraer texto"}
+        {loading ? (
+          <LoaderCircle size={16} className="spin" />
+        ) : (
+          <ScanText size={16} />
+        )}
+        {loading ? "Extrayendo..." : "Extraer texto"}
       </button>
     </div>
   );

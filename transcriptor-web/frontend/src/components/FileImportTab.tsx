@@ -1,4 +1,5 @@
 import { useState, useRef } from "react";
+import { FolderOpen, Users, AudioLines, LoaderCircle } from "lucide-react";
 import { transcribeFile } from "../services/api";
 import { Segment } from "../types";
 import LanguageSelector from "./LanguageSelector";
@@ -59,7 +60,7 @@ export default function FileImportTab({ onResult }: Props) {
           style={{ display: "none" }}
         />
         <button onClick={() => fileRef.current?.click()} className="btn-upload">
-          📁 Importar archivo de audio
+          <FolderOpen size={16} /> Importar archivo de audio
         </button>
       </div>
 
@@ -73,7 +74,7 @@ export default function FileImportTab({ onResult }: Props) {
             checked={diarize}
             onChange={(e) => setDiarize(e.target.checked)}
           />
-          🔊 Identificar hablantes
+          <Users size={16} /> Identificar hablantes
         </label>
       </div>
 
@@ -82,7 +83,12 @@ export default function FileImportTab({ onResult }: Props) {
         disabled={!file || loading}
         className="btn-start"
       >
-        {loading ? "⏳ Transcribiendo..." : "🎙️ Transcribir"}
+        {loading ? (
+          <LoaderCircle size={16} className="spin" />
+        ) : (
+          <AudioLines size={16} />
+        )}
+        {loading ? "Transcribiendo..." : "Transcribir"}
       </button>
     </div>
   );

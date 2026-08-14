@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Mic, FolderOpen, Image as ImageIcon } from "lucide-react";
 import RecordingTab from "./components/RecordingTab";
 import FileImportTab from "./components/FileImportTab";
 import OcrTab from "./components/OcrTab";
@@ -34,10 +35,10 @@ export default function App() {
     setSpeakers(0);
   };
 
-  const tabs: { name: TabName; label: string }[] = [
-    { name: "recording", label: "🎤 Grabación" },
-    { name: "file", label: "📁 Archivo" },
-    { name: "ocr", label: "🖼️ OCR" },
+  const tabs: { name: TabName; label: string; icon: typeof Mic }[] = [
+    { name: "recording", label: "Grabación", icon: Mic },
+    { name: "file", label: "Archivo", icon: FolderOpen },
+    { name: "ocr", label: "OCR", icon: ImageIcon },
   ];
 
   return (
@@ -48,15 +49,18 @@ export default function App() {
       </header>
 
       <nav className="tabs">
-        {tabs.map((t) => (
-          <button
-            key={t.name}
-            className={activeTab === t.name ? "tab active" : "tab"}
-            onClick={() => setActiveTab(t.name)}
-          >
-            {t.label}
-          </button>
-        ))}
+        {tabs.map((t) => {
+          const Icon = t.icon;
+          return (
+            <button
+              key={t.name}
+              className={activeTab === t.name ? "tab active" : "tab"}
+              onClick={() => setActiveTab(t.name)}
+            >
+              <Icon size={16} /> {t.label}
+            </button>
+          );
+        })}
       </nav>
 
       <main>

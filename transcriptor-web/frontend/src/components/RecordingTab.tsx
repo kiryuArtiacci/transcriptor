@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Play, Square, Pause, Users } from "lucide-react";
 import { useAudioRecorder, extensionFromMimeType } from "../hooks/useAudioRecorder";
 import { transcribeLive } from "../services/api";
 import { Segment } from "../types";
@@ -74,21 +75,22 @@ export default function RecordingTab({ onResult }: Props) {
           onClick={handleStart}
           disabled={isRecording || processing}
         >
-          ▶ Iniciar Grabación
+          <Play size={16} /> Iniciar Grabación
         </button>
         <button
           className="btn-stop"
           onClick={handleStop}
           disabled={!isRecording || processing}
         >
-          ⏹ Finalizar
+          <Square size={16} /> Finalizar
         </button>
         <button
           className="btn-pause"
           onClick={togglePause}
           disabled={!isRecording || processing}
         >
-          {isPaused ? "▶ Reanudar" : "⏸ Pausar"}
+          {isPaused ? <Play size={16} /> : <Pause size={16} />}
+          {isPaused ? "Reanudar" : "Pausar"}
         </button>
       </div>
 
@@ -100,7 +102,7 @@ export default function RecordingTab({ onResult }: Props) {
             checked={diarize}
             onChange={(e) => setDiarize(e.target.checked)}
           />
-          🔊 Identificar hablantes
+          <Users size={16} /> Identificar hablantes
         </label>
       </div>
     </div>
