@@ -38,10 +38,7 @@ public class TranscriptionService {
     }
 
     public TranscriptionResult transcribeLive(File audioFile, String language, boolean diarize) {
-        if (diarize) {
-            return whisperClient.transcribe(audioFile, language, true);
-        }
-        return whisperClient.transcribeGoogle(audioFile, language);
+        return whisperClient.transcribe(audioFile, language, diarize);
     }
 
     private static String extensionOf(MultipartFile file) {

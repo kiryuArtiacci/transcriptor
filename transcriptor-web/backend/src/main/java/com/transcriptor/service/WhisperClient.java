@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.client.HttpStatusCodeException;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -40,10 +41,19 @@ public class WhisperClient {
         body.add("diarize", String.valueOf(diarize));
 
         var request = new HttpEntity<>(body, headers);
-        var response = restTemplate.postForEntity(
-                serviceUrl + "/transcribe", request, JsonNode.class);
-
-        return parseResult(response.getBody());
+        try {
+            var response = restTemplate.postForEntity(
+                    serviceUrl + "/transcribe", request, JsonNode.class);
+            return parseResult(response.getBody());
+        } catch (HttpStatusCodeException e) {
+            return new TranscriptionResult(
+                    "Error del motor de transcripción: " + e.getResponseBodyAsString(),
+                    List.of(), "", 0, "error", 0);
+        } catch (Exception e) {
+            return new TranscriptionResult(
+                    "No se pudo conectar al motor de transcripción: " + e.getMessage(),
+                    List.of(), "", 0, "error", 0);
+        }
     }
 
     public TranscriptionResult transcribeGoogle(File audioFile, String language) {
@@ -55,10 +65,19 @@ public class WhisperClient {
         body.add("language", language);
 
         var request = new HttpEntity<>(body, headers);
-        var response = restTemplate.postForEntity(
-                serviceUrl + "/transcribe-google", request, JsonNode.class);
-
-        return parseResult(response.getBody());
+        try {
+            var response = restTemplate.postForEntity(
+                    serviceUrl + "/transcribe-google", request, JsonNode.class);
+            return parseResult(response.getBody());
+        } catch (HttpStatusCodeException e) {
+            return new TranscriptionResult(
+                    "Error del motor de transcripción: " + e.getResponseBodyAsString(),
+                    List.of(), "", 0, "error", 0);
+        } catch (Exception e) {
+            return new TranscriptionResult(
+                    "No se pudo conectar al motor de transcripción: " + e.getMessage(),
+                    List.of(), "", 0, "error", 0);
+        }
     }
 
     private TranscriptionResult parseResult(JsonNode node) {

@@ -1,6 +1,7 @@
 """Whisper Microservice — Transcripción y diarización vía REST."""
 
 import json
+import logging
 import os
 import sys
 import tempfile
@@ -12,6 +13,9 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from transcriptor.config import whisper_lang
 from transcriptor.core.transcriber import Transcriber
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("whisper-service")
 
 app = Flask(__name__)
 _transcriber: Transcriber | None = None
@@ -36,6 +40,16 @@ def _segments_to_dict(segments: list) -> list:
     ]
 
 
+def _save_upload(file) -> str:
+    """Guarda el archivo subido preservando su extensión original."""
+    original_name = file.filename or "audio.wav"
+    ext = os.path.splitext(original_name)[1] or ".wav"
+    fd, temp_path = tempfile.mkstemp(suffix=ext, prefix="whisper_svc_")
+    os.close(fd)
+    file.save(temp_path)
+    return temp_path
+
+
 @app.route("/health", methods=["GET"])
 def health():
     return jsonify({"status": "ok", "service": "whisper-transcriber"})
@@ -56,12 +70,9 @@ def transcribe():
     diarize = request.form.get("diarize", "false").lower() == "true"
     lang_code = whisper_lang(language)
 
-    fd, temp_path = tempfile.mkstemp(suffix=".wav", prefix="whisper_svc_")
-    os.close(fd)
+    temp_path = _save_upload(file)
 
     try:
-        file.save(temp_path)
-
         tc = _get_transcriber()
         result = tc.transcribe_file_with_whisper(
             temp_path,
@@ -80,6 +91,7 @@ def transcribe():
             ),
         })
     except Exception as exc:
+        logger.exception("Error en /transcribe: %s", exc)
         return jsonify({"error": str(exc)}), 500
     finally:
         try:
@@ -97,12 +109,9 @@ def transcribe_google():
     file = request.files["file"]
     language = request.form.get("language", "es-ES")
 
-    fd, temp_path = tempfile.mkstemp(suffix=".wav", prefix="whisper_svc_")
-    os.close(fd)
+    temp_path = _save_upload(file)
 
     try:
-        file.save(temp_path)
-
         tc = _get_transcriber()
         result = tc.transcribe_file_with_google(
             temp_path,
@@ -118,6 +127,7 @@ def transcribe_google():
             "backend": result.backend,
         })
     except Exception as exc:
+        logger.exception("Error en /transcribe-google: %s", exc)
         return jsonify({"error": str(exc)}), 500
     finally:
         try:
